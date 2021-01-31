@@ -133,3 +133,4 @@ input/data/.DS_Store
 
 
 /models/*.csv
+/test_csv/
