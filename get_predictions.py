@@ -1,3 +1,4 @@
+import json 
 import os
 import io
 
@@ -35,3 +36,9 @@ response = client.invoke_endpoint(
 
 test_y_preds = json.loads(response['Body'].read().decode('utf-8'))
 print('Accuracy Score: ', accuracy_score(test_y, test_y_preds))
+
+## print out the array of predicted and true labels, if you want
+print('\nPredicted class labels: ')
+print(test_y_preds)
+print('\nTrue class labels: ')
+print(test_y.values)
