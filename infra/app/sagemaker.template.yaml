@@ -19,7 +19,7 @@ Parameters:
     Type: String
     Default: 1
   RoleArn:
-    Description: Execution role 
+    Description: Execution role
     Type: String
   InferenceCode:
     Description: The location of the inference code
@@ -32,7 +32,14 @@ Resources:
       PrimaryContainer:
         Image: !Ref TrainingImage
         ModelDataUrl: !Ref ModelDataUrl
-        Environment:  {"SAGEMAKER_PROGRAM": "predict.py","SAGEMAKER_ENABLE_CLOUDWATCH_METRICS": false,"SAGEMAKER_REGION": {"Ref": "AWS::Region"},"SAGEMAKER_CONTAINER_LOG_LEVEL": "20","SAGEMAKER_SUBMIT_DIRECTORY": {"Ref": "InferenceCode"}}
+        Environment:
+          {
+            "SAGEMAKER_PROGRAM": "predict.py",
+            "SAGEMAKER_ENABLE_CLOUDWATCH_METRICS": false,
+            "SAGEMAKER_REGION": { "Ref": "AWS::Region" },
+            "SAGEMAKER_CONTAINER_LOG_LEVEL": "20",
+            "SAGEMAKER_SUBMIT_DIRECTORY": { "Ref": "InferenceCode" },
+          }
       ExecutionRoleArn: !Ref RoleArn
       ModelName: !Ref ModelName
   Endpoint:
@@ -53,10 +60,10 @@ Resources:
   EndpointName:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Sub '/applications/cs-sagemaker/endpoints/name'
+      Name: !Sub "/applications/cs-sagemaker/endpoints/name"
       Type: String
       Value: !GetAtt Endpoint.EndpointName
-        
+
 Outputs:
   EndpointId:
     Value: !Ref Endpoint
