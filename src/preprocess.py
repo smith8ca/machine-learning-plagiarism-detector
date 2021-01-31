@@ -188,7 +188,7 @@ assert fake_df.shape==(3, 4), \
 # assert np.all(fake_df.iloc[:,0].values==fake_y), 'First column is not equal to the labels, fake_y.'
 # print('Tests passed!')
 
-data_dir = 'plagiarism_data'
+data_dir = 'models'
 helpers.make_csv(train_x, train_y, filename='train.csv', data_dir=data_dir)
 helpers.make_csv(test_x, test_y, filename='test.csv', data_dir=data_dir)
 
