@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
-Description: Main template for bootstrapping the endpoint and API 
+Description: Main template for bootstrapping the endpoint and API
 
 Parameters:
   ModelName:
@@ -21,7 +21,7 @@ Parameters:
     Type: String
     Default: 1
   RoleArn:
-    Description: Execution role 
+    Description: Execution role
     Type: String
   InferenceCode:
     Description: The location of the inference code
@@ -47,5 +47,3 @@ Resources:
           Ref: RoleArn
         InferenceCode:
           Ref: InferenceCode
-
-

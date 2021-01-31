@@ -1,36 +1,40 @@
+import os
+import sys
+
+import boto3
+import pandas as pd
 import sagemaker
 from sagemaker.sklearn.estimator import SKLearn
 from sklearn.metrics import accuracy_score
-import boto3
-import pandas as pd
-import os
-import sys
 
 role = sys.argv[1]
 sagemaker_session = sagemaker.Session()
 bucket = sagemaker_session.default_bucket()
 
-train_key = './models/train.csv' 
+train_key = './models/train.csv'
 test_key = './models/test.csv'
 data_dir = './models'
 prefix = 'sagemaker/plagiarism'
 
-train_path = sagemaker_session.upload_data(train_key, bucket=bucket, key_prefix=prefix)
-test_path = sagemaker_session.upload_data(test_key, bucket=bucket, key_prefix=prefix)
+train_path = sagemaker_session.upload_data(
+    train_key, bucket=bucket, key_prefix=prefix)
+test_path = sagemaker_session.upload_data(
+    test_key, bucket=bucket, key_prefix=prefix)
+
 
 def local():
     sklearn = SKLearn(
-            entry_point='train.py',
-            source_dir='./src/',
-            role=role,
-            py_version="py3",
-            framework_version="0.23-1",
-            train_instance_count=1,
-            train_instance_type='local',
-            hyperparameters={
-                    'max_depth': 5,
+        entry_point='train.py',
+        source_dir='./src/',
+        role=role,
+        py_version="py3",
+        framework_version="0.23-1",
+        train_instance_count=1,
+        train_instance_type='local',
+        hyperparameters={
+            'max_depth': 5,
                     'n_estimators': 10
-                    })
+        })
 
     sklearn.fit({'train': 'file://models/train.csv'})
     predictor = sklearn.deploy(initial_instance_count=1, instance_type='local')
@@ -41,16 +45,17 @@ def local():
     accuracy = accuracy_score(test_y, test_y_preds)
     print('The current accuracy score for the prediction', accuracy)
 
-def cloud(): 
+
+def cloud():
     sklearn = SKLearn(
-            entry_point='train.py',
-            source_dir='./src/',
-            role=role,
-            py_version="py3",
-            framework_version="0.23-1",
-            instance_count=1,
-            instance_type='ml.c4.xlarge',
-            sagemaker_session=sagemaker_session)
+        entry_point='train.py',
+        source_dir='./src/',
+        role=role,
+        py_version="py3",
+        framework_version="0.23-1",
+        instance_count=1,
+        instance_type='ml.c4.xlarge',
+        sagemaker_session=sagemaker_session)
 
     sklearn.fit({'train': train_path})
 
