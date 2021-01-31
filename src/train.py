@@ -2,8 +2,13 @@ from __future__ import print_function
 import argparse
 import os
 import pandas as pd
-from sklearn.externals import joblib
+import joblib
 from sklearn.ensemble import RandomForestClassifier
+
+
+## ADDITION ## 
+from sklearn.svm import SVC
+
 
 
 # Provided model load function
@@ -32,12 +37,13 @@ if __name__ == '__main__':
     parser.add_argument('--output-data-dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
     parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
     parser.add_argument('--data-dir', type=str, default=os.environ['SM_CHANNEL_TRAIN'])
-    parser.add_argument('--max_depth', type=int, default=5)
-    parser.add_argument('--n_estimators', type=int, default=10)
+    # parser.add_argument('--max_depth', type=int, default=5)
+    # parser.add_argument('--n_estimators', type=int, default=10)
     
     
     # args holds all passed-in arguments
     args = parser.parse_args()
+    
     # Read in csv training file
     training_dir = args.data_dir
     train_data = pd.read_csv(os.path.join(training_dir, "train.csv"), header=None, names=None)
@@ -47,14 +53,14 @@ if __name__ == '__main__':
     train_x = train_data.iloc[:,1:]
     
     
-    max_depth = args.max_depth
-    n_estimators = args.n_estimators
+    # max_depth = args.max_depth
+    # n_estimators = args.n_estimators
     
-    model = RandomForestClassifier(max_depth=max_depth, n_estimators=n_estimators)
-   
+    # model = RandomForestClassifier(max_depth=max_depth, n_estimators=n_estimators)
+    model = SVC(gamma = 'auto')
+
     # Training the model
     model.fit(train_x, train_y)    
     
-
     # Save the trained model
     joblib.dump(model, os.path.join(args.model_dir, "model.joblib"))

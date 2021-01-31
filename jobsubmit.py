@@ -4,8 +4,9 @@ from sklearn.metrics import accuracy_score
 import boto3
 import pandas as pd
 import os
+import sys
 
-role = 'SageMakerRole'
+role = sys.argv[1]
 sagemaker_session = sagemaker.Session()
 bucket = sagemaker_session.default_bucket()
 
@@ -22,6 +23,8 @@ def local():
             entry_point='train.py',
             source_dir='./src/',
             role=role,
+            py_version="py3",
+            framework_version="0.23-1",
             train_instance_count=1,
             train_instance_type='local',
             hyperparameters={
@@ -43,13 +46,11 @@ def cloud():
             entry_point='train.py',
             source_dir='./src/',
             role=role,
-            train_instance_count=1,
-            train_instance_type='ml.c4.xlarge',
-            sagemaker_session=sagemaker_session,
-            hyperparameters={
-                    'max_depth': 5,
-                    'n_estimators': 10
-                    })
+            py_version="py3",
+            framework_version="0.23-1",
+            instance_count=1,
+            instance_type='ml.c4.xlarge',
+            sagemaker_session=sagemaker_session)
 
     sklearn.fit({'train': train_path})
 

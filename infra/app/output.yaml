@@ -29,7 +29,7 @@ Resources:
   Sagemaker:
     Type: AWS::Serverless::Application
     Properties:
-      Location: https://s3.eu-central-1.amazonaws.com/plagiarism-detector-sagemaker-tarasowski/c8112534d5ae7477493b8df548f1c272.template
+      Location: https://s3.amazonaws.com/plagiarism-detector-sagemaker-smith8ca/c8112534d5ae7477493b8df548f1c272.template
       Parameters:
         ModelName:
           Ref: ModelName
